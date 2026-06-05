@@ -190,6 +190,7 @@ Make sure MongoDB tools are installed and in your PATH. On Linux/Mac:
 ```bash
 # Install MongoDB Community Edition which includes mongodump
 # Or install just the tools package
+curl -LO https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2404-x86_64-100.13.0.deb && sudo dpkg -i mongodb-database-tools-ubuntu2404-x86_64-100.13.0.deb # Linux
 brew install mongodb-community  # macOS
 ```
 
