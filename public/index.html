@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Backup Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div class="logo-container">
+                    <svg class="header-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" stroke="url(#header-gradient)"></ellipse>
+                        <path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5" stroke="url(#header-gradient)"></path>
+                        <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6" stroke="url(#header-gradient)"></path>
+                        <path d="M12 7v7m-3-3l3 3 3-3" stroke="#00ED64" stroke-width="2.5"></path>
+                        <defs>
+                            <linearGradient id="header-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00ED64" />
+                                <stop offset="100%" stop-color="#00f2fe" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>MongoDB Backup Manager</h1>
+                </div>
+                <button id="logoutBtn" class="btn btn-logout">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+            <p class="subtitle">Automated Database Backups with 5-Day Retention Schedule</p>
+        </header>
+
+        <main>
+            <!-- Status Section -->
+            <section class="status-section">
+                <div class="section-header">
+                    <h2>System Status</h2>
+                </div>
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="card-icon-wrapper">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-label">Last Backup Run</div>
+                            <div class="status-value" id="lastBackupTime">Loading...</div>
+                            <div class="status-detail" id="lastBackupSize">-</div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="card-icon-wrapper">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                                <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
+                            </svg>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-label">Active Backups</div>
+                            <div class="status-value" id="totalBackups">-</div>
+                            <div class="status-detail">/ 5 retained maximum</div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="card-icon-wrapper">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-label">Backup Schedule</div>
+                            <div class="status-value">Daily CRON</div>
+                            <div class="status-detail" id="scheduleTime">2:00 AM</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Section -->
+            <section class="actions-section-wrapper">
+                <div class="section-header">
+                    <h2>Manual Controls</h2>
+                </div>
+                <div class="actions-section">
+                    <button id="createBackupBtn" class="btn btn-primary">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                        Create Backup Now
+                    </button>
+                    <button id="refreshBtn" class="btn btn-secondary">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.57-1.19"></path>
+                        </svg>
+                        Refresh Console
+                    </button>
+                </div>
+            </section>
+
+            <!-- Backups List Section -->
+            <section class="backups-section">
+                <div class="section-header">
+                    <h2>Stored Database Backups</h2>
+                </div>
+                <div id="backupsList" class="backups-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Querying filesystem for backups...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Toast Notification -->
+            <div id="toast" class="toast"></div>
+        </main>
+
+        <!-- Custom Confirmation Modal -->
+        <div id="confirmModal" class="modal-backdrop">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-title-icon" id="modalIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Populated dynamically -->
+                        </svg>
+                    </div>
+                    <h3 id="modalTitle">Confirm Action</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage">Are you sure you want to perform this action?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="modalCancelBtn" class="btn btn-secondary">Cancel</button>
+                    <button id="modalConfirmBtn" class="btn btn-danger-action">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2026 MongoDB Backup Manager &bull; Automatic Scheduled Maintenance System &bull; Active Mode</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
